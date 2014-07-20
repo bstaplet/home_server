@@ -1,3 +1,7 @@
+CREATE SCHEMA IF NOT EXISTS home_server;
+
+USE home_server;
+
 CREATE TABLE IF NOT EXISTS USERS (
 	id           INT          NOT NULL AUTO_INCREMENT,
 	first_name   VARCHAR(255) NOT NULL,
@@ -15,3 +19,5 @@ CREATE TABLE IF NOT EXISTS USERS (
 
 INSERT INTO USERS (first_name, last_name, uname, hashed_pword, salt, email)
 VALUES ('admin_first', 'admin_last', 'admin', '', '', 'admin@hausawausa.com');
+
+-- SELECT * FROM USERS;

@@ -1,0 +1,7 @@
+{ 
+    "name"     : "user",
+    "version" : "0.0.1",
+    "author"   : "Brian Stapleton <brian@hausawausa.com>",
+    "description" : "user library",
+    "main": "./user.js" 
+}

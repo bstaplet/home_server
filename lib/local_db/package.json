@@ -1,0 +1,7 @@
+{ 
+    "name"     : "local_db",
+    "version" : "0.0.1",
+    "author"   : "Brian Stapleton <brian@hausawausacom>",
+    "description" : "a library for accessing users",
+    "main": "./local_db.js" 
+}

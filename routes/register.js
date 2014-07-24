@@ -7,7 +7,7 @@ exports.register = function (req, res) {
 
 exports.submit = function (req, res) {
 	var first = req.body.first;
-	var last = req.body.last;
+	var last  = req.body.last;
 	var email = req.body.email;
 	var uname = req.body.uname;
 	var pword = req.body.pword;
@@ -25,10 +25,21 @@ exports.submit = function (req, res) {
 	});
 };
 
-function validateInfo(first, last, email, uname, pw, confirmPw, callback) {
-	var len = userdb.length;
+exports.add = function(req, res) {
+	var u = flash (req, res, 'user');
+	db.addUser(u, function(error, user){
+		if (error){
+			message = error;
+			res.redirect('/register');
+		} else {
+			res.redirect('/login');
+		}
+	});
+};
+
+function validateInfo(first, last, email, uname, pword, confirmPword, callback) {
 	var returned = false;
-	if (first === '' || last === '' || email === '' || uname === '' || pw === ''){
+	if (first === '' || last === '' || email === '' || uname === '' || pword === ''){
 		returned = true;
 		callback("Please fill in all the fields");
 	}
@@ -36,18 +47,19 @@ function validateInfo(first, last, email, uname, pw, confirmPw, callback) {
 		returned = true;
 		callback("Passwords do not match");
 	}
-	db.findUser({ "email" : email }, new function(err, result){
+	db.findUser({ "email" : email }, function(err, result){
 		if (err !== undefined) {
 			returned = true;
 			console.log(err);
 			callback("Error connecting database, please try again.");
 		}
-		if (result.length > 0) {
+		console.log(result);
+		if (result !== undefined && result.length > 0) {
 			returned = true;
 			callback("User already exists with that email");
 		}
 	});
-	db.findUser({ "uname" : uname }, new function(err, result){
+	db.findUser({ "uname" : uname }, function(err, result){
 		if (err !== undefined) {
 			returned = true;
 			console.log(err);

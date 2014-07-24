@@ -9,8 +9,11 @@
 </head>
 
 <body>
-	<div id="loginForm" class="col_4">
+	<div id="registerForm" class="col_4">
 		<h3><strong>Hausa Wausa Register</strong></h3>
+		<div id="errorMessageDiv">
+			<label id="errorMessageLabel" class=<%= cssClass %>><%= message %></label>
+		</div>
 		<form class="vertical" method="post" action="/register/submit">
 			<label for="first">First Name</label>
 			<input id="first" name="first" type="text"/>

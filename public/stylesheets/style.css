@@ -8,7 +8,15 @@ a {
   color: #00B7FF;
 }
 
-#loginForm{
+#registerForm{
 	margin-left: 35%;
 	margin-top: 9%;
+}
+
+#errorMessageDiv{
+	margin-bottom: 2%;
+}
+
+.error{
+	color: red;
 }

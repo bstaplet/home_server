@@ -1,0 +1,7 @@
+{ 
+    "name"     : "security",
+    "version" : "0.0.1",
+    "author"   : "Brian Stapleton <brian@hausawausa.com>",
+    "description" : "security module",
+    "main": "./security.js" 
+}

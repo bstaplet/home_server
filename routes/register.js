@@ -19,6 +19,7 @@ exports.submit = function (req, res) {
 		if (error){
 			message = error;
 			cssClass = 'error';
+			console.log(error);
 			res.redirect('/register');
 		}
 		else {
@@ -42,40 +43,34 @@ exports.add = function(req, res) {
 };
 
 function validateInfo(first, last, email, uname, pword, confirmPword, callback) {
-	var returned = false;
 	if (first === '' || last === '' || email === '' || uname === '' || pword === ''){
-		returned = true;
 		callback("Please fill in all the fields");
+		return;
 	}
 	if (pword !== confirmPword){
-		returned = true;
 		callback("Passwords do not match");
+		return;
 	}
 	db.findUser({ "email" : email }, function(err, result){
 		if (err !== undefined) {
-			returned = true;
 			callback("Error connecting database, please try again.");
 			return;
 		}
 		if (result !== undefined && result.length > 0) {
-			returned = true;
-			callback("User already exists with that email");
+			callback("User already exists with that email.");
 			return;
 		}
-		callback (undefined, { first : first, last : last, uname : uname, email : email, pword : pword });
-	});
-	db.findUser({ "uname" : uname }, function(err, result){
-		if (err !== undefined) {
-			returned = true;
-			callback("Error connecting database, please try again.");
-			return;
-		}
-		if (result.length > 0) {
-			returned = true;
-			callback("User already exists with that uname");
-			return;
-		}
-		callback (undefined, { first : first, last : last, uname : uname, email : email, pword : pword });
+		db.findUser({ "uname" : uname }, function(err, result){
+			if (err !== undefined) {
+				callback("Error connecting database, please try again.");
+				return;
+			}
+			if (result.length > 0) {
+				callback("User already exists with that username.");
+				return;
+			}
+			callback (undefined, { first : first, last : last, uname : uname, email : email, pword : pword });
+		});
 	});
 }
 

@@ -1,13 +1,15 @@
 var _user = require('../lib/user');
 var db = require('../lib/local_db');
+var message = 'Enter your information below.';
+var cssClass = '';
 
 exports.register = function (req, res) {
-	res.render('register', {});
+	res.render('register', { message : message, cssClass : cssClass });
 };
 
 exports.submit = function (req, res) {
 	var first = req.body.first;
-	var last = req.body.last;
+	var last  = req.body.last;
 	var email = req.body.email;
 	var uname = req.body.uname;
 	var pword = req.body.pword;
@@ -16,6 +18,8 @@ exports.submit = function (req, res) {
 	validateInfo (first, last, email, uname, pword, confirmPword, function(error, u) {
 		if (error){
 			message = error;
+			cssClass = 'error';
+			console.log(error);
 			res.redirect('/register');
 		}
 		else {
@@ -25,41 +29,49 @@ exports.submit = function (req, res) {
 	});
 };
 
-function validateInfo(first, last, email, uname, pw, confirmPw, callback) {
-	var len = userdb.length;
-	var returned = false;
-	if (first === '' || last === '' || email === '' || uname === '' || pw === ''){
-		returned = true;
-		callback("Please fill in all the fields");
-	}
-	if (pword !== confirmPword){
-		returned = true;
-		callback("Passwords do not match");
-	}
-	db.findUser({ "email" : email }, new function(err, result){
-		if (err !== undefined) {
-			returned = true;
-			console.log(err);
-			callback("Error connecting database, please try again.");
-		}
-		if (result.length > 0) {
-			returned = true;
-			callback("User already exists with that email");
+exports.add = function(req, res) {
+	var u = flash (req, res, 'user');
+	db.addUser(u, function(error, user){
+		if (error){
+			message = error;
+			cssClass = 'error';
+			res.redirect('/register');
+		} else {
+			res.redirect('/login');
 		}
 	});
-	db.findUser({ "uname" : uname }, new function(err, result){
-		if (err !== undefined) {
-			returned = true;
-			console.log(err);
-			callback("Error connecting database, please try again.");
-		}
-		if (result.length > 0) {
-			returned = true;
-			callback("User already exists with that uname");
-		}
-	})
+};
 
-	if (!returned) callback (undefined, { first : first, last : last, uname : uname, email : email, pword : pword });
+function validateInfo(first, last, email, uname, pword, confirmPword, callback) {
+	if (first === '' || last === '' || email === '' || uname === '' || pword === ''){
+		callback("Please fill in all the fields");
+		return;
+	}
+	if (pword !== confirmPword){
+		callback("Passwords do not match");
+		return;
+	}
+	db.findUser({ "email" : email }, function(err, result){
+		if (err !== undefined) {
+			callback("Error connecting database, please try again.");
+			return;
+		}
+		if (result !== undefined && result.length > 0) {
+			callback("User already exists with that email.");
+			return;
+		}
+		db.findUser({ "uname" : uname }, function(err, result){
+			if (err !== undefined) {
+				callback("Error connecting database, please try again.");
+				return;
+			}
+			if (result.length > 0) {
+				callback("User already exists with that username.");
+				return;
+			}
+			callback (undefined, { first : first, last : last, uname : uname, email : email, pword : pword });
+		});
+	});
 }
 
 /***** Unexported Functions *****/

@@ -28,6 +28,10 @@ app.use('/users', users);
 
 /***** GET REQUESTS *****/
 app.get('/register', register.register);
+app.get('/register/add', register.add);
+
+/***** POST REQUESTS *****/
+app.post('/register/submit', register.submit);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

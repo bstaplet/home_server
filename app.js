@@ -9,6 +9,7 @@ var http = require('http')
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var register = require('./routes/register');
+var login = require('/routes/login');
 
 var app = express();
 
@@ -29,9 +30,12 @@ app.use('/users', users);
 /***** GET REQUESTS *****/
 app.get('/register', register.register);
 app.get('/register/add', register.add);
+app.get('/login', login.login);
+app.get('/login/main', login.main);
 
 /***** POST REQUESTS *****/
 app.post('/register/submit', register.submit);
+app.post('/login/auth', login.auth);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
